@@ -22,19 +22,22 @@ import {
   templateUrl: './tasks-element.component.html',
   styleUrl: './tasks-element.component.css',
 })
-export class TasksElementComponent implements OnInit, OnChanges {
+export class TasksElementComponent implements OnInit {
   tasks: any[] = [];
   updateFormVisibilty: boolean = false;
   taskDate: string = '';
   taskStatus: string = '';
   taskId: string = '';
+  searchWords: string = '';
+  filteredTasks: any[] = [];
 
   updateTaskForm: FormGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
   });
 
-  @Input() task!: Task;
+  @Input() task!: any;
+  @Input() search!: string;
 
   constructor(private _taskService: TasksService) {}
 
@@ -43,14 +46,27 @@ export class TasksElementComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.tasks.unshift(this.task);
+    if (changes['task'] && !changes['task'].isFirstChange()) {
+      this.tasks.unshift(this.task);
+      this.filteredTasks = [...this.tasks];
+    }
+
+    if (changes['search'] && !changes['search'].isFirstChange()) {
+      this.filterTasks(this.search);
+    }
+  }
+
+  filterTasks(search: string) {
+    this.filteredTasks = this.tasks.filter((task) => {
+      return task.name.toLowerCase().includes(search.toLowerCase());
+    });
   }
 
   fillTasks() {
     this._taskService.getTasks().subscribe({
       next: (data) => {
         this.tasks = data.data.reverse();
-        console.log(this.tasks);
+        this.filteredTasks = this.tasks;
       },
       error: (err) => {
         console.log(err);
@@ -58,14 +74,13 @@ export class TasksElementComponent implements OnInit, OnChanges {
     });
   }
 
-  comleteTask(id: string, index: number) {
-    console.log(id);
+  completeTask(id: string, index: number) {
     this._taskService.updateStatus(id).subscribe({
       next: (data) => {
         let task = this.tasks.find((task) => {
           return task._id == id;
         });
-        task.status = 'completed';
+        if (task) task.status = 'completed';
       },
       error: (err) => {
         console.log(err);
@@ -99,7 +114,7 @@ export class TasksElementComponent implements OnInit, OnChanges {
           return task._id === id;
         });
         task.name = formData.name;
-        task.describtion = formData.describtion;
+        task.description = formData.description;
         this.updateFormVisibilty = false;
       },
       error: (err) => {

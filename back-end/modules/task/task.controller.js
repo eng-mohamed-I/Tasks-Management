@@ -9,8 +9,9 @@ let allTasks = async (req, res) => {
 let addTask = async (req, res) => {
   let task = req.body;
   let newTask = new taskModel(task);
+
   await newTask.save();
-  res.status(200).json({ message: "task created successfully" });
+  res.status(200).json({ message: "task created successfully", data: newTask });
 };
 
 let updateStatus = async (req, res) => {
@@ -31,7 +32,7 @@ let updateTask = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ message: "invalid id" });
   }
-  await taskModel.findByIdAndUpdate(id, body);
+  let task = await taskModel.findByIdAndUpdate(id, body);
   return res.status(200).json({ message: "task updated successfully" });
 };
 export { allTasks, addTask, updateStatus, updateTask };

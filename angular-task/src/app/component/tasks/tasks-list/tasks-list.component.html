@@ -2,8 +2,11 @@
   <img class="bg-img" src="pexels-startup-stock-photos-7376.jpg" alt="image" />
   <div class="container position-relative">
     <div class="row mt-5">
-      <app-tasks-add (task)="addedTask($event)"></app-tasks-add>
-      <app-tasks-element [task]="task" ></app-tasks-element>
+      <app-tasks-add
+        (task)="addedTask($event)"
+        (searchEvent)="searchTrem($event)"
+      ></app-tasks-add>
+      <app-tasks-element [search]="searchWords" [task]="task"></app-tasks-element>
     </div>
   </div>
 </div>

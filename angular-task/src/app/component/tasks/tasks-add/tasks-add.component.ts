@@ -1,8 +1,9 @@
-import { NgClass } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { CommonModule, NgClass } from '@angular/common';
+import { Component, EventEmitter, NgModule, Output } from '@angular/core';
 import {
   FormControl,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -12,18 +13,20 @@ import { Task } from '../../../models/task.model';
 @Component({
   selector: 'app-tasks-add',
   standalone: true,
-  imports: [NgClass, ReactiveFormsModule],
+  imports: [NgClass, FormsModule, ReactiveFormsModule],
   templateUrl: './tasks-add.component.html',
   styleUrl: './tasks-add.component.css',
 })
 export class TasksAddComponent {
   formVisibility: boolean = false;
+  searchTrem: string = '';
   addTaskForm: FormGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
   });
 
   @Output() task: EventEmitter<Task> = new EventEmitter<Task>();
+  @Output() searchEvent: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(private _tasksService: TasksService) {}
 
@@ -33,6 +36,10 @@ export class TasksAddComponent {
 
   get taskDescription() {
     return this.addTaskForm.get('description');
+  }
+
+  search() {
+    this.searchEvent.emit(this.searchTrem);
   }
 
   showForm() {
@@ -53,7 +60,7 @@ export class TasksAddComponent {
       };
       this._tasksService.addTask(formData).subscribe({
         next: (res) => {
-          this.task.emit(formData);
+          this.task.emit(res.data);
           this.formVisibility = false;
           this.addTaskForm.reset();
           console.log(res);

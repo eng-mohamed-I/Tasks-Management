@@ -11,7 +11,7 @@
       </tr>
     </thead>
     <tbody id="top-task" class="table-group-divider table-secondary">
-      @for(task of tasks; track $index){
+      @for(task of filteredTasks; track $index){
       <tr
         role="button"
         [ngClass]="task.status === 'completed' ? 'opacity-50' : 'opacity-100'"
@@ -40,7 +40,7 @@
           }@else {
           <div class="d-flex gap-2">
             <button
-              (click)="comleteTask(task._id, $index)"
+              (click)="completeTask(task._id, $index)"
               class="btn btn-success btn-sm"
             >
               Complete

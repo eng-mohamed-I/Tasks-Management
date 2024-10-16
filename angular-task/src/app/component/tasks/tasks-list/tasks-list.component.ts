@@ -11,9 +11,14 @@ import { Task } from '../../../models/task.model';
   styleUrl: './tasks-list.component.css',
 })
 export class TasksListComponent {
-  task: any = {} as Task;
+  task: any = {} as any;
+  searchWords: string = '';
 
   addedTask(task: any) {
     this.task = task;
+  }
+
+  searchTrem(searchTrim: string) {
+    this.searchWords = searchTrim;
   }
 }
