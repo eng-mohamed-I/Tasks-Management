@@ -1,0 +1,56 @@
+<div class="btn-container d-flex justify-content-between p-2 gap-2">
+  <div class="position-relative d-flex 2-25">
+    <input type="text" class="form-control" placeholder="Search by task name" />
+    <i
+      class="fa-solid text-secondary fa-magnifying-glass position-absolute end-0 top-50 translate-middle"
+    ></i>
+  </div>
+
+  <div class="position-relative">
+    <button
+      (click)="showForm()"
+      class="DocSearch DocSearch-Button btn btn-warning text-white btn-sm"
+      [ngClass]="formVisibility ? 'btn-danger' : ''"
+    >
+      @if(formVisibility){
+      <i class="fa-solid fa-xmark"></i>
+      }@else {<i class="fa-solid fa-plus"></i> add task }
+    </button>
+    @if(formVisibility) {
+    <div class="add-form position-absolute top-100 end-0 bg-light p-2 rounded">
+      <form
+        (submit)="addTask()"
+        [formGroup]="addTaskForm"
+        class="d-flex flex-column gap-2"
+      >
+        <div>
+          <input
+            class="form-control"
+            type="text"
+            formControlName="name"
+            placeholder="Name"
+            [ngClass]="{
+              'is-invalid':
+                (taskName?.touched || taskName?.dirty) && taskName?.invalid
+            }"
+          />
+        </div>
+        <div>
+          <textarea
+            class="form-control"
+            type="text-area"
+            formControlName="description"
+            placeholder="Desription"
+            [ngClass]="{
+              'is-invalid':
+                (taskDescription?.touched || taskDescription?.dirty) &&
+                taskDescription?.invalid
+            }"
+          ></textarea>
+        </div>
+        <button class="btn btn-success">add</button>
+      </form>
+    </div>
+    }
+  </div>
+</div>

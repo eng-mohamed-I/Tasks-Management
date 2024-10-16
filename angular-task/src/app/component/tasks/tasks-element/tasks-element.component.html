@@ -1,0 +1,92 @@
+<div class="t-table rounded shadow-sm">
+  <table class="table table-hover position-relative">
+    <thead class="table-light position-sticky top-0 shadow-sm">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Task</th>
+        <th scope="col">Description</th>
+        <th scope="col">Date</th>
+        <th scope="col">Status</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody id="top-task" class="table-group-divider table-secondary">
+      @for(task of tasks; track $index){
+      <tr
+        (click)="updateTask(task)"
+        role="button"
+        [ngClass]="task.status === 'completed' ? 'opacity-50' : 'opacity-100'"
+      >
+        <th scope="row">{{ $index + 1 }}</th>
+        <td>{{ task.name }}</td>
+        <td [title]="task.description">
+          {{ task.description.substring(0, 20) }} ...
+        </td>
+        <td>{{ task.startDate }}</td>
+        <td>
+          <small
+            class="text-white text-center"
+            [ngClass]="
+              task.status === 'completed'
+                ? 'badge bg-success'
+                : 'badge bg-danger'
+            "
+          >
+            {{ task.status }}
+          </small>
+        </td>
+        <td>
+          @if(task.status === 'completed'){ Done }@else {
+          <button
+            (click)="comleteTask(task._id, $index)"
+            class="btn btn-success btn-sm"
+          >
+            Complete
+          </button>
+          }
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<!-- update form -->
+@if(updateFormVisibilty){
+<div class="form-container-update position-fixed start-0 top-0 w-100">
+  <div
+    class="f-update position-absolute top-50 start-50 translate-middle shadow-lg rounded"
+  >
+    <form
+      [formGroup]="upateTaskForm"
+      class="rounded border p-3 d-flex flex-column gap-2"
+    >
+      <span
+        ><i
+          role="button"
+          (click)="hideUpdateForm()"
+          class="fa-solid fa-x float-end mb-3 text-light"
+        ></i
+      ></span>
+      <div>
+        <input
+          formControlName="name"
+          type="text"
+          placeholder="name"
+          class="form-control"
+        />
+      </div>
+      <div>
+        <textarea
+          formControlName="description"
+          type="text"
+          placeholder="Description ..."
+          class="form-control"
+        ></textarea>
+      </div>
+      <button class="btn btn-success btn-sm fw-bold">update</button>
+    </form>
+  </div>
+</div>
+
+}

@@ -1,0 +1,31 @@
+.t-table {
+  max-height: 80vh;
+  overflow-y: scroll;
+}
+
+thead {
+  z-index: 999;
+  opacity: 90%;
+}
+
+.form-container-update {
+  z-index: 1001;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.494);
+}
+
+.f-update {
+  width: 50%;
+  background-color: rgba(88, 88, 88, 0.77);
+  animation: showHide 0.3s ease;
+}
+
+@keyframes showHide {
+  0% {
+    opacity: 0%;
+    width: 0px;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
