@@ -22,7 +22,16 @@ let updateStatus = async (req, res) => {
 
   await taskModel.findByIdAndUpdate(id, { status: "completed" });
 
-  return res.status(200).json({ message: "task updated successfully" });
+  return res.status(200).json({ message: "status updated successfully" });
 };
 
-export { allTasks, addTask, updateStatus };
+let updateTask = async (req, res) => {
+  let { id } = req.params;
+  let { body } = req;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ message: "invalid id" });
+  }
+  await taskModel.findByIdAndUpdate(id, body);
+  return res.status(200).json({ message: "task updated successfully" });
+};
+export { allTasks, addTask, updateStatus, updateTask };

@@ -13,7 +13,6 @@
     <tbody id="top-task" class="table-group-divider table-secondary">
       @for(task of tasks; track $index){
       <tr
-        (click)="updateTask(task)"
         role="button"
         [ngClass]="task.status === 'completed' ? 'opacity-50' : 'opacity-100'"
       >
@@ -36,13 +35,22 @@
           </small>
         </td>
         <td>
-          @if(task.status === 'completed'){ Done }@else {
-          <button
-            (click)="comleteTask(task._id, $index)"
-            class="btn btn-success btn-sm"
-          >
-            Complete
-          </button>
+          @if(task.status === 'completed'){ Done
+          <i (click)="showUpdateTaskForm(task)" class="fa-solid fa-eye"></i>
+          }@else {
+          <div class="d-flex gap-2">
+            <button
+              (click)="comleteTask(task._id, $index)"
+              class="btn btn-success btn-sm"
+            >
+              Complete
+            </button>
+            <i
+              (click)="showUpdateTaskForm(task)"
+              class="fa-solid fa-pen-nib text-warning"
+            ></i>
+          </div>
+
           }
         </td>
       </tr>
@@ -58,7 +66,7 @@
     class="f-update position-absolute top-50 start-50 translate-middle shadow-lg rounded"
   >
     <form
-      [formGroup]="upateTaskForm"
+      [formGroup]="updateTaskForm"
       class="rounded border p-3 d-flex flex-column gap-2"
     >
       <span
@@ -68,8 +76,20 @@
           class="fa-solid fa-x float-end mb-3 text-light"
         ></i
       ></span>
+      <p class="d-flex justify-content-between">
+        <span class="text-light fw-bold">Date : {{ taskDate }}</span>
+        <span
+          class="badge"
+          [ngClass]="taskStatus === 'completed' ? 'bg-success' : 'bg-danger'"
+          >{{ taskStatus }}</span
+        >
+      </p>
       <div>
+        <label class="text-light" for="name"
+          >Name <span class="text-danger">*</span></label
+        >
         <input
+          id="name"
           formControlName="name"
           type="text"
           placeholder="name"
@@ -77,14 +97,26 @@
         />
       </div>
       <div>
+        <label class="text-light" for="description"
+          >Description <span class="text-danger">*</span></label
+        >
         <textarea
+          id="description"
           formControlName="description"
           type="text"
           placeholder="Description ..."
           class="form-control"
         ></textarea>
       </div>
-      <button class="btn btn-success btn-sm fw-bold">update</button>
+      @if(taskStatus === 'completed') {
+      <p class="text-white fw-bold text-center">
+        Done <i class="fa-solid fa-check"></i>
+      </p>
+      }@else {
+      <button (click)="updateTask()" class="btn btn-success btn-sm fw-bold">
+        update
+      </button>
+      }
     </form>
   </div>
 </div>

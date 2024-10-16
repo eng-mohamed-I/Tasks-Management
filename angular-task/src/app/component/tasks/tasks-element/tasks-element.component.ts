@@ -25,7 +25,11 @@ import {
 export class TasksElementComponent implements OnInit, OnChanges {
   tasks: any[] = [];
   updateFormVisibilty: boolean = false;
-  upateTaskForm: FormGroup = new FormGroup({
+  taskDate: string = '';
+  taskStatus: string = '';
+  taskId: string = '';
+
+  updateTaskForm: FormGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
   });
@@ -69,12 +73,38 @@ export class TasksElementComponent implements OnInit, OnChanges {
     });
   }
 
-  updateTask(task: any) {
+  showUpdateTaskForm(task: any) {
     this.updateFormVisibilty = true;
-    console.log(task);
+    this.updateTaskForm.patchValue({ name: task.name });
+    this.updateTaskForm.patchValue({ description: task.description });
+    this.taskId = task._id;
+    this.taskDate = task.startDate;
+    this.taskStatus = task.status;
   }
 
   hideUpdateForm() {
     this.updateFormVisibilty = false;
+  }
+
+  updateTask() {
+    let id = this.taskId;
+    let formData = {
+      ...this.updateTaskForm.value,
+    };
+
+    this._taskService.updateTask(id, formData).subscribe({
+      next: (res) => {
+        console.log('task updated successfully');
+        let task = this.tasks.find((task) => {
+          return task._id === id;
+        });
+        task.name = formData.name;
+        task.describtion = formData.describtion;
+        this.updateFormVisibilty = false;
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
   }
 }

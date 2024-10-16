@@ -22,4 +22,8 @@ export class TasksService {
   updateStatus(id: string): Observable<any> {
     return this._http.put(`${this.baseUrl}/tasks/${id}`, id);
   }
+
+  updateTask(id: string, task: any): Observable<any> {
+    return this._http.put(`${this.baseUrl}/update-task/${id}`, task);
+  }
 }

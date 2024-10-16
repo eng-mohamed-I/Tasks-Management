@@ -36,6 +36,7 @@ export class TasksAddComponent {
   }
 
   showForm() {
+    this.addTaskForm.reset();
     this.formVisibility = this.formVisibility === true ? false : true;
   }
 
@@ -54,7 +55,7 @@ export class TasksAddComponent {
         next: (res) => {
           this.task.emit(formData);
           this.formVisibility = false;
-          this.addTaskForm.reset()
+          this.addTaskForm.reset();
           console.log(res);
         },
         error: (err) => {

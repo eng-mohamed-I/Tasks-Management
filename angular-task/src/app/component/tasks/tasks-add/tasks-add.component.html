@@ -17,7 +17,9 @@
       }@else {<i class="fa-solid fa-plus"></i> add task }
     </button>
     @if(formVisibility) {
-    <div class="add-form position-absolute top-100 end-0 bg-light p-2 rounded">
+    <div
+      class="add-form position-absolute top-100 end-0 bg-light p-2 rounded shadow-lg"
+    >
       <form
         (submit)="addTask()"
         [formGroup]="addTaskForm"
